@@ -1,11 +1,23 @@
 @import url('searchbar.css');
 
+:root {
+    --primary: #0d1b4c; /* dark blue */
+    --primary-light: #1e2d6f;
+    --text-dark: #222;
+    --text-light: #555;
+    --bg: #f8f9fc;
+    --card-bg: #fff;
+    --radius: 10px;
+    --shadow: 0 4px 12px rgba(0,0,0,0.06);
+    --transition: 0.25s ease-in-out;
+}
+
 .main-content {
-    background-color: rgba(250, 250, 250);
+    background: var(--bg);
     flex: 1;
     margin-left: calc(var(--sidebar-collapsed-width) + 1rem);
-    transition: margin-left var(--transition-duration) ease-in-out;
-    padding: 1rem 2rem;
+    transition: margin-left var(--transition) ease-in-out;
+    padding: 2rem;
     min-height: 100vh;
 }
 
@@ -15,6 +27,73 @@
 
 .dashboard-header {
     display: flex;
-    align-items: start;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin: 0;
+}
+
+.dashboard-header .subtitle {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: transform var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.card h2 {
+    font-size: 1.2rem;
+    color: var(--primary-light);
+    margin-bottom: 1.2rem;
+}
+
+/* List cards */
+.list-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.list-card {
+    display: block;
+    padding: 0.9rem 1.2rem;
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    border-radius: var(--radius);
+    color: var(--text-dark);
+    text-decoration: none;
+    transition: background var(--transition), box-shadow var(--transition);
+}
+
+.list-card:hover {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+
+.empty {
+    color: var(--text-light);
+    font-style: italic;
+    margin: 0.5rem 0;
 }

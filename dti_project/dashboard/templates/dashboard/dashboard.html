@@ -3,70 +3,93 @@
 {% block title %} Dashboard {% endblock %}
 
 {% block body %}
+<div class="dashboard-container">
     <header class="dashboard-header">
-        <h1>Welcome {{ user }}</h1>
+        <div>
+            <h1>Welcome, {{ user }}</h1>
+            <p class="subtitle">Your quick access hub</p>
+        </div>
         {% include 'dashboard/components/searchbar.html' %}
     </header>
 
-    
-    <div>
-        <h2>Sales Promotion Permit Applications (Sample list only)</h2>
-        <ul>
-            {% for promo in sales_promos %}
-                <li>
-                    <a href="{% url 'sales-promotion-application' promo.id %}">{{ promo }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div>
-        <h2>Personal Data Sheet (Iredesign niyo na mga kupal pls)</h2>
-        <ul>
-            {% for sheet in personal_data_sheets %}
-                <li>
-                    <a href="{% url 'personal-data-sheet' sheet.id %}">{{ sheet }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div>
-        <h2>Service and Repair Accreditation (Sample list only)</h2>
-        <ul>
-            {% for accreditation in service_accreditations %}
-                <li>
-                    <a href="{% url 'service-repair-accreditation' accreditation.id %}">{{ accreditation }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div>
-        <h2>Inspection Validation Report (Sample list only)</h2>
-        <ul>
-            {% for report in inspection_reports %}
-                <li>
-                    <a href="{% url 'inspection-validation-report' report.id %}">{{ report }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div>
-        <h2>Orders of Payment (Sample list only)</h2>
-        <ul>
-            {% for order in orders_of_payment %}
-                <li>
-                    <a href="{% url 'order-of-payment' order.id %}">{{ order }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div>
-        <h2>Checklist Evaluation Sheets (Sample list only)</h2>
-        <ul>
-            {% for sheet in checklist_evaluation_sheets %}
-                <li>
-                    <a href="{% url 'checklist-evaluation-sheet' sheet.id %}">{{ sheet }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+    <section class="card-grid">
+        <div class="card">
+            <h2>Sales Promotion Permits</h2>
+            <div class="list-grid">
+                {% for promo in sales_promos %}
+                    <a href="{% url 'sales-promotion-application' promo.id %}" class="list-card">
+                        {{ promo }}
+                    </a>
+                {% empty %}
+                    <p class="empty">No records available</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Personal Data Sheets</h2>
+            <div class="list-grid">
+                {% for sheet in personal_data_sheets %}
+                    <a href="{% url 'personal-data-sheet' sheet.id %}" class="list-card">
+                        {{ sheet }}
+                    </a>
+                {% empty %}
+                    <p class="empty">No records available</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Service & Repair Accreditation</h2>
+            <div class="list-grid">
+                {% for accreditation in service_accreditations %}
+                    <a href="{% url 'service-repair-accreditation' accreditation.id %}" class="list-card">
+                        {{ accreditation }}
+                    </a>
+                {% empty %}
+                    <p class="empty">No records available</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Inspection Validation Reports</h2>
+            <div class="list-grid">
+                {% for report in inspection_reports %}
+                    <a href="{% url 'inspection-validation-report' report.id %}" class="list-card">
+                        {{ report }}
+                    </a>
+                {% empty %}
+                    <p class="empty">No records available</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Orders of Payment</h2>
+            <div class="list-grid">
+                {% for order in orders_of_payment %}
+                    <a href="{% url 'order-of-payment' order.id %}" class="list-card">
+                        {{ order }}
+                    </a>
+                {% empty %}
+                    <p class="empty">No records available</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Checklist Evaluation Sheets</h2>
+            <div class="list-grid">
+                {% for sheet in checklist_evaluation_sheets %}
+                    <a href="{% url 'checklist-evaluation-sheet' sheet.id %}" class="list-card">
+                        {{ sheet }}
+                    </a>
+                {% empty %}
+                    <p class="empty">No records available</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
 {% endblock %}
