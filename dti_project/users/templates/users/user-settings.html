@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Settings Page</title>
+  
+     <!-- CSS -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/documents.css">
+    <link rel="stylesheet" href="css/form.css">
+    <link rel="stylesheet" href="css/progress-nav.css">
+    <link rel="stylesheet" href="css/user-settings.css">
+
+     <!-- JS -->
+    <script src="js/scripts.js"></script>
+    <script src="js/documents.js"></script>
+    <script src="js/formsets.js"></script>
+    <script src="sjs/lazy_loading.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@latest"></script>
+</head>
+<body>
+
+  <div class="layout">
+    <div class="user-settings-container">
+
+      <aside class="side-navbar extended">
+    <button id="collapse-nav-btn">
+        <i class="fa-solid fa-angle-left"></i>
+    </button>
+    <nav>
+        <header>
+            <h1>Collapse Navbar</h1>
+        </header>
+        <section aria-labelledby="main-menu-heading">
+            <h2 class="nav-section-heading">Main</h2>
+            <ul class="side-nav-list">
+                <li class="nav-item">
+                    <a href="{% url 'dashboard' %}" class="nav-link">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item dropdown active">
+                    <button class="nav-dropdown-btn">
+                        <i class="fa-solid fa-file"></i>
+                        <span>Create</span>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </button>
+                    <div class="nav-dropdown-list">   
+                            <a href="{% url 'create-sales-promotion' %}">Sales Promotion Application</a>       
+                            <a href="{% url 'create-personal-data-sheet' %}">Personal Data Sheet</a>               
+                            <a href="{% url 'create-service-repair-accreditation' %}">Service and Repair Accreditation</a>                   
+                            <a href="{% url 'create-inspection-validation-report' %}">Inspection Validation Report</a>                        
+                            <a href="{% url 'create-order-of-payment' %}">Order of Payment</a>
+                            <a href="{% url 'create-checklist-evaluation-sheet' %}">Requirement Checklist</a>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <section aria-label="others-menu-heading">
+            <h2 class="nav-section-heading">Others</h2>
+            <ul class="side-nav-list">
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="account-menu-heading" id="account-menu-section">
+            <ul class="side-nav-list">
+                <li class="nav-item">
+                    <a href="" id="profile-link">
+                        <img src="{{ user.profile_picture.url }}" alt="">
+                        <div id="logged-in-user-details">
+                            <strong>{% if user.is_authenticated %}{{ user }}{% endif %}</strong>
+                            <p>{{ user.role|titlecase }}</p>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'logout' %}" class="nav-link">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+    </nav>
+</aside>
+
+        <!-- Personal Information -->
+        <section>
+          <h2>Personal Information</h2>
+          <div class="avatar">
+            <img src="https://storage.googleapis.com/a1aa/image/cccf381d-f830-422c-2cfb-57dcd6a4be2c.jpg" alt="User avatar"/>
+            <button class="btn" type="button">Change</button>
+          </div>
+          <form class="two-cols">
+            <div>
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" value="Walter White"/>
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" value="saymyname@iamthedanger.com"/>
+            </div>
+          </form>
+        </section>
+
+        <!-- Change Password -->
+        <section>
+          <h2>Change Password</h2>
+          <form class="three-cols">
+            <div>
+              <label for="old-password">Old Password</label>
+              <input type="password" id="old-password" name="old-password" placeholder="Enter your password"/>
+            </div>
+            <div>
+              <label for="new-password">New Password</label>
+              <input type="password" id="new-password" name="new-password" placeholder="Enter your password"/>
+            </div>
+            <div>
+              <label for="new-password-again">New Password Again</label>
+              <input type="password" id="new-password-again" name="new-password-again" placeholder="Enter your password"/>
+            </div>
+          </form>
+        </section>
+
+        <!-- Preferences -->
+        <section>
+          <h2>Preferences</h2>
+          <form class="three-cols">
+            <div>
+              <label for="theme">Theme</label>
+              <select id="theme" name="theme">
+                <option>Light Mode</option>
+              </select>
+            </div>
+            <div>
+              <label for="language">Language</label>
+              <select id="language" name="language">
+                <option>English</option>
+              </select>
+            </div>
+            <div>
+              <label for="timezone">Timezone</label>
+              <select id="timezone" name="timezone">
+                <option selected disabled>Select timezone</option>
+              </select>
+            </div>
+          </form>
+        </section>
+
+        <!-- Connected Accounts and Devices -->
+        <section class="split">
+          <!-- Connected Accounts -->
+          <div>
+            <h2>Connected Accounts</h2>
+            <div class="account">
+              <div class="account-info">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/800px-Google_%22G%22_logo.svg.png" alt="Google logo"/>
+                <div>
+                  <p>Google</p>
+                  <p>Connected as saymyname@gmail.com</p>
+                </div>
+              </div>
+              <button class="btn" type="button">Disconnect</button>
+            </div>
+            <div class="account">
+              <div class="account-info">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub logo"/>
+                <div>
+                  <p>GitHub</p>
+                  <p>Connected as saymyname</p>
+                </div>
+              </div>
+              <button class="btn" type="button">Disconnect</button>
+            </div>
+          </div>
+
+          <!-- Devices -->
+          <div>
+            <h2>Devices</h2>
+            <div class="device">
+              <div class="device-info">
+                <i class="fas fa-laptop"></i>
+                <div>
+                  <p>Desktop 14124</p>
+                  <p>Last used 2 days ago</p>
+                </div>
+              </div>
+              <button class="btn" type="button">Remove</button>
+            </div>
+            <div class="device">
+              <div class="device-info">
+                <i class="fas fa-laptopfas fa-laptop"></i>
+                <div>
+                  <p>Desktop 123123</p>
+                  <p>Last used 1 week ago</p>
+                </div>
+              </div>
+              <button class="btn" type="button">Remove</button>
+            </div>
+          </div>
+        </section>
+      </div>
+  </div>
+  
+</body>
+</html>
