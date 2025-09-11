@@ -8,7 +8,6 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, LayoutObject, TEMPLATE_PACK, Fieldset, HTML, Div, Row, Column, Submit
 from django.template.loader import render_to_string
 from django.forms.widgets import SelectMultiple
-from django.core.validators import RegexValidator
 
 class SortForm(forms.Form):
     SORT_CHOICES = [
@@ -54,51 +53,20 @@ class BaseCustomForm(forms.ModelForm):
                     'telephone_number',
                 ]
                 if name in numerical_fields:
-                    field.validators.append(
-                        RegexValidator(r'^\d+$', "Only numbers are allowed.")
-                    )
                     field.widget.attrs.update({
                         'inputmode': 'numeric',
                         'pattern': r'\d*',
                         'oninput': "this.value=this.value.replace(/[^0-9]/g,'')",
                     })
-                    
 
-                # --- Contact & Mobile numbers ---
                 if name in ['contact_number', 'mobile_number']:
                     field.validators.append(self.validate_contact_number)
                     field.widget.attrs['maxlength'] = 11
 
-                # --- Telephone number ---
-                if name == 'telephone_number':
-                    field.validators.append(self.validate_telephone_number)
-                    field.widget.attrs['maxlength'] = 7  # e.g., local 7-digit number
-
-                # Letters-only fields
-                letters_only_fields = [
-                    'first_name',
-                    'last_name',
-                    'middle_name',
-                    'full_name',
-                    'current_address',  # optional, remove if address can have numbers
-                ]
-                if name in letters_only_fields:
-                    field.validators.append(
-                        RegexValidator(
-                            regex=r'^[A-Za-z\s]+$',
-                            message="Only letters and spaces are allowed."
-                        )
-                    )
-                    field.widget.attrs.update({
-                        'pattern': r'[A-Za-z\s]+',
-                        'oninput': "this.value=this.value.replace(/[^A-Za-z\\s]/g,'')",
-                    })
-                
-                # Date of birth must not be in future
                 if name == 'date_of_birth':
                     field.validators.append(self.validate_date_of_birth)
                     field.widget.attrs['max'] = date.today().isoformat()
-        
+
         # --- Auto-fill user fields ---
         if user:
             # Check if extra fields exist on a profile
