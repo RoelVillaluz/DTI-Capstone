@@ -8,6 +8,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, LayoutObject, TEMPLATE_PACK, Fieldset, HTML, Div, Row, Column, Submit
 from django.template.loader import render_to_string
 from django.forms.widgets import SelectMultiple
+from django.forms.widgets import SelectMultiple
+from django.core.validators import RegexValidator
 
 class SortForm(forms.Form):
     SORT_CHOICES = [
@@ -43,7 +45,11 @@ class BaseCustomForm(forms.ModelForm):
                 # Add common class
                 existing_classes = field.widget.attrs.get('class', '')
                 field.widget.attrs['class'] = f"{existing_classes} form-group".strip()
-
+                
+                # -------------------------------
+                # VALIDATION RULES
+                # -------------------------------
+                
                 # Numeric fields
                 numerical_fields = [
                     'tax_identification_number',
@@ -59,10 +65,36 @@ class BaseCustomForm(forms.ModelForm):
                         'oninput': "this.value=this.value.replace(/[^0-9]/g,'')",
                     })
 
+                # --- Contact & Mobile numbers ---
                 if name in ['contact_number', 'mobile_number']:
                     field.validators.append(self.validate_contact_number)
                     field.widget.attrs['maxlength'] = 11
 
+                # --- Telephone number ---
+                if name == 'telephone_number':
+                    field.validators.append(self.validate_telephone_number)
+                    field.widget.attrs['maxlength'] = 7  # e.g., local 7-digit number
+                
+                # Letters-only fields
+                letters_only_fields = [
+                    'first_name',
+                    'last_name',
+                    'middle_name',
+                    'full_name',
+                ]
+                if name in letters_only_fields:
+                    field.validators.append(
+                        RegexValidator(
+                            regex=r'^[A-Za-z\s]+$',
+                            message="Only letters and spaces are allowed."
+                        )
+                    )
+                    field.widget.attrs.update({
+                        'pattern': r'[A-Za-z\s]+',
+                        'oninput': "this.value=this.value.replace(/[^A-Za-z\\s]/g,'')",
+                    })
+
+                # --- Date of birth ---
                 if name == 'date_of_birth':
                     field.validators.append(self.validate_date_of_birth)
                     field.widget.attrs['max'] = date.today().isoformat()
