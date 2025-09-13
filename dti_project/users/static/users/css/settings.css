@@ -110,12 +110,14 @@
 }
 
 .settings-list li {
-    border: 1px solid #e5e7eb;
+    border: none;               /* remove outline */
     border-radius: 0.5rem;
-    padding: 1rem;
+    padding: 0;                 /* reset padding so only button spacing matters */
     margin-bottom: 0.75rem;
     transition: background 0.3s, transform 0.2s;
+    background: transparent;    /* remove white layer */
 }
+
 
 .settings-list li:hover {
     background: #f9fafb;
@@ -145,39 +147,61 @@
 }
 
 /* Buttons */
+
+.button-group {
+    display: flex;
+    flex-direction: column; /* stack buttons top to bottom */
+    gap: 0.25rem;            /* space between buttons */
+    width: 100%;            /* make group stretch full width */
+}
+
 .btn {
+    width: 100%;            /* stretch to container width */
+    justify-content: center; /* center text/icons */
     padding: 0.6rem 1.2rem;
     border-radius: 0.5rem;
     font-size: 0.9rem;
     font-weight: 600;
     text-decoration: none;
-    transition: background 0.3s;
+    transition: background 0.3s, box-shadow 0.3s;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+
+    border: none;        /* remove default border */
+    outline: none;       /* remove outline */
+    box-shadow: none;    /* remove default inner shadow */
 }
+
 
 .btn-primary {
     background: var(--primary, #0f0853);
     color: #fff !important;
+    border: none;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.1);
 }
+
+.btn-primary:hover {
+    background: #1e1b6b;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.2);
+}
+
 
 .btn-primary i {
     color: #fff !important;
 }
 
-.btn-primary:hover {
-    background: #1e1b6b;
-    color: #fff !important;
-}
 
 .btn-secondary {
-    background: #e5e7eb;
+    background: #d4c8ff;
     color: #111827;
+    border: none;
+    box-shadow: 0 3px 3px rgba(0,0,0,0.1);
 }
 
 .btn-secondary:hover {
-    background: #d1d5db;
+    background: #d4c8ff;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.2);
 }
 
 .btn.disabled {

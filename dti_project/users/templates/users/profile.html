@@ -49,25 +49,21 @@
         </div>
 
 
-        <!-- Activity Section -->
-        <div class="profile-section">
+        <!-- Activity Section, removed for now-->
+        <!-- <div class="profile-section">
             <h2>Recent Activity</h2>
             <ul class="activity-list">
                 <li><i class="fas fa-check-circle"></i> Submitted a new document</li>
                 <li><i class="fas fa-user-edit"></i> Updated profile information</li>
                 <li><i class="fas fa-clock"></i> Last login: {{ profile.last_login|date:"M d, Y H:i" }}</li>
             </ul>
-        </div>
+        </div> -->
 
         <!-- Stats Section -->
         <div class="profile-section stats-grid">
             <div class="stat-box">
-                <h3>{{ profile.documents.count }}</h3>
+                <h3>{{ total_documents|default:0 }}</h3>
                 <p>Documents</p>
-            </div>
-            <div class="stat-box">
-                <h3>{{ profile.tasks.count }}</h3>
-                <p>Tasks</p>
             </div>
             <div class="stat-box">
                 <h3>{{ profile.date_joined|date:"M Y" }}</h3>
