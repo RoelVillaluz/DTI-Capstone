@@ -94,71 +94,66 @@
 /* Profile Body and Sections */
 .profile-card .profile-body,
 .profile-card .profile-section {
-    padding-top: 120px; /* increased from 80px to match header overlap */
+    padding-top: 110px;     /* keep this as-is */
     padding-left: 1.5rem;
     padding-right: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding-bottom: 0.5rem;  /* reduced bottom padding */
 }
 
 .profile-body h2,
 .profile-section h2 {
     font-size: 1.2rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     color: var(--primary, #0f0853);
 }
 
-/* Activity List */
-.activity-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.activity-list li {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0;
-    color: #374151;
-}
-
-.activity-list li i {
-    color: var(--primary, #0f0853);
-}
 
 /* Stats Grid */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));    
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));    
+    gap: 0.5rem;
     text-align: center;
-    background: #fafafa;
-    padding: 1.5rem;
+    margin-top: 0.25rem;     /* pull grid closer to body */
+    padding-top: 0;          /* remove extra space above */
+    padding-bottom: 0.25rem; /* keep it neat */
+    min-height: 40px;
+
 }
 
+/* Stat Card */
 .stat-box {
-    background: #fff;
-    border-radius: 0.75rem;
-    padding: 1rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease;
+    background: #d4c8ff;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 60px; /* fixed height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column; /* keeps h3 + p stacked */
 }
 
 .stat-box:hover {
     transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
 .stat-box h3 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;    /* smaller number text */
     margin: 0;
     color: var(--primary, #0f0853);
 }
 
 .stat-box p {
-    margin: 0.25rem 0 0;
-    font-size: 0.9rem;
+    margin: 0.15rem 0 0;
+    font-size: 1rem;   /* smaller label text */
     color: #6b7280;
 }
+
+
+
 
 /* Actions */
 .profile-actions {

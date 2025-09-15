@@ -4,8 +4,8 @@
 
 {% block body %}
 <header class="dashboard-header">
-    <h1>Welcome, {{ user }}</h1>
-    {% include 'dashboard/components/searchbar.html' %}
+    <h1>Welcome, {{ user }}. You have {{ user.new_notifications.count }} Notifications</h1>
+    {% include 'dashboard/components/dashboard_actions.html' %}
 </header>
 
 <main class="dashboard-container">

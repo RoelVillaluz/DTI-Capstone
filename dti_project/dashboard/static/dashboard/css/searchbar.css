@@ -59,6 +59,10 @@
     z-index: 1000;
 }
 
+.suggestions-box.visible {
+    visibility: visible;
+}
+
 .suggestions-header h3 {
     display: flex;
     align-items: center;

@@ -38,16 +38,18 @@
         <div class="settings-body">
             <h2>Account Settings</h2>
             <ul class="settings-list">
-                <li>
-                    <a href="{% url 'profile_edit' user.pk %}" class="btn btn-primary">
-                        <i class="fas fa-user-edit"></i> Edit Profile
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="btn btn-secondary disabled">
-                        <i class="fas fa-shield-alt"></i> Privacy Settings (Coming Soon)
-                    </a>
-                </li>
+                <div class="button-group">
+                    <li>
+                        <a href="{% url 'profile_edit' user.pk %}" class="btn btn-primary">
+                            <i class="fas fa-user-edit"></i> Edit Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-secondary disabled">
+                            <i class="fas fa-shield-alt"></i> Privacy Settings (Coming Soon)
+                        </a>
+                    </li>
+                </div>
             </ul>
         </div>
     </div>

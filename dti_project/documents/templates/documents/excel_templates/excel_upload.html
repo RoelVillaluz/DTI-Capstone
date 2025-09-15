@@ -1,0 +1,71 @@
+{% extends 'dashboard/layout.html' %}
+
+{% block title %} Checklist Evaluation List {% endblock %}
+
+{% load static %}
+
+{% block body %}
+
+{% include 'documents/components/list_components/document_list_filter_modal.html' %}
+
+<div class="document-list-container">
+
+    <h1>Upload Excel File for Checklist Evaluations</h1>
+
+    {% if error %}
+    <div class="error-msg">{{ error }}</div>
+    {% endif %}
+    {% if success %}
+    <div class="success-msg">{{ success }}</div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" id="excel-upload-form" action="{% url 'upload-excel' %}">
+        {% csrf_token %}
+        <label class="excel-dropzone" for="excel_file">
+            <input type="file" id="excel_file" name="excel_file" accept=".xlsx,.xls" hidden required>
+            <div class="upload-content">
+                <div class="upload-icon">
+                    <i class="fa-solid fa-upload"></i>
+                </div>
+                <h3 id="drag-drop-text">
+                    Drag and drop or <span class="highlighted-span">choose file</span> to upload
+                </h3>
+                <p id="file-text">No file chosen yet.</p>
+            </div>
+        </label>
+
+        <button type="submit" class="btn btn-primary mt-3">Upload Excel</button>
+    </form>
+
+</div>
+
+<script>
+    const dropzone = document.querySelector('.excel-dropzone');
+    const input = document.getElementById('excel_file');
+    const fileText = document.getElementById('file-text');
+
+    dropzone.addEventListener('dragover', e => {
+        e.preventDefault();
+        dropzone.classList.add('dragover');
+    });
+    dropzone.addEventListener('dragleave', e => {
+        dropzone.classList.remove('dragover');
+    });
+    dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) {
+            input.files = e.dataTransfer.files;
+            fileText.textContent = e.dataTransfer.files[0].name;
+        }
+    });
+    input.addEventListener('change', () => {
+        if (input.files.length) {
+            fileText.textContent = input.files[0].name;
+        } else {
+            fileText.textContent = 'No file chosen yet.';
+        }
+    });
+</script>
+
+{% endblock %}

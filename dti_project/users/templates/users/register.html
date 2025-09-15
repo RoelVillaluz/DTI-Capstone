@@ -39,7 +39,9 @@
                 <div class="form-group">
                     <label for="id_default_phone">Phone Number</label>
                     <input type="text" name="default_phone" id="id_default_phone"
-                        value="{{ form.default_phone.value|default_if_none:'' }}" required>
+                        value="{{ form.default_phone.value|default_if_none:'' }}" required maxlength="11"
+                        pattern="\d{11}" title="Phone number must be exactly 11 digits"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
                 </div>
 
                 <div class="form-group">
@@ -54,24 +56,22 @@
                         hx-post="{% url 'check-password-strength' %}" hx-trigger="keyup change delay:100ms"
                         hx-target="#password-strength-result" hx-swap="innerHTML">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="id_password2">Confirm Password</label>
                     <input type="password" name="password2" id="id_password2" required>
                 </div>
-
+                <!-- Remove admin choice and just change everything to something like "Welcome Business Owner" at the top and remove choices -->
                 <div class="form-group" id="roles-form-group">
                     <h4>Role: </h4>
                     <div class="role-selection">
                         <div class="role-choice-item">
-                            <input type="radio" name = "role" id = "id_role_business_owner" value = "business_owner"
-                            {% if form.role.value == "business_owner" %}checked{% endif %}>
+                            <input type="radio" name="role" id="id_role_business_owner" value="business_owner" {% if form.role.value == "business_owner" %}checked{% endif %}>
                             <label for="id_role_business_owner">Business Owner</label>
                         </div>
                         <div class="role-choice-item">
-                            <input type="radio" name = "role" id = "id_role_admin" value = "admin" 
-                            {% if form.role.value == "admin"%}checked{% endif %}>
-                            <label for="id_role_admin">Admin</label>
+                            <input type="radio" name="role" id="id_role_collecting_agent" value="collecting_agent" {% if form.role.value == "collecting_agent" %}checked{% endif %}>
+                            <label for="id_role_collecting_agent">Collecting Agent</label>
                         </div>
                     </div>
                 </div>

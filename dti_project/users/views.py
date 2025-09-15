@@ -15,6 +15,40 @@ from django.views.generic import TemplateView, View, DetailView, UpdateView
 from users.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
+from django.shortcuts import render, get_object_or_404
+from users.models import User
+from documents.models import (
+    # Base models
+    BaseApplication,
+    DraftModel,
+    YesNoField,
+    PeriodModel,
+    
+    # Checklist evaluation
+    ChecklistEvaluationSheet,
+    
+    # Inspection validation
+    InspectionValidationReport,
+    
+    # Order of payment
+    OrderOfPayment,
+    
+    # Personal data sheet models
+    PersonalDataSheet,
+    EmployeeBackground,
+    TrainingsAttended,
+    EducationalAttainment,
+    CharacterReference,
+    
+    # Sales promotion models
+    SalesPromotionPermitApplication,
+    ProductCovered,
+    
+    # Service repair accreditation models
+    ServiceRepairAccreditationApplication,
+    Service,
+    ServiceCategory,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +63,41 @@ class ProfileDetailView(DetailView):
     model = User
     template_name = "users/profile.html"
     context_object_name = "profile"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = self.get_object()
+
+        # Document queries
+        sales_promos = SalesPromotionPermitApplication.objects.filter(user=profile)
+        personal_data_sheets = PersonalDataSheet.objects.filter(user=profile)
+        service_accreditations = ServiceRepairAccreditationApplication.objects.filter(user=profile)
+        inspection_reports = InspectionValidationReport.objects.filter(user=profile)
+        orders_of_payment = OrderOfPayment.objects.filter(user=profile)
+        checklist_evaluation_sheets = ChecklistEvaluationSheet.objects.filter(user=profile)
+
+        # Total count
+        total_documents = (
+            sales_promos.count()
+            + personal_data_sheets.count()
+            + service_accreditations.count()
+            + inspection_reports.count()
+            + orders_of_payment.count()
+            + checklist_evaluation_sheets.count()
+        )
+
+        # Add to context
+        context.update({
+            "sales_promos": sales_promos,
+            "personal_data_sheets": personal_data_sheets,
+            "service_accreditations": service_accreditations,
+            "inspection_reports": inspection_reports,
+            "orders_of_payment": orders_of_payment,
+            "checklist_evaluation_sheets": checklist_evaluation_sheets,
+            "total_documents": total_documents,
+        })
+        return context
+
 
 class ProfileEditView(UpdateView):
     model = User

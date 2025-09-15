@@ -12,6 +12,9 @@ from django.apps import apps
 from ..models.base_models import DraftModel
 from django.contrib.auth.mixins import LoginRequiredMixin
 from ..mixins.permissions_mixins import UserRoleMixin
+from django.shortcuts import render
+from django.db import transaction
+import pandas as pd
 from ..models import (
     ChecklistEvaluationSheet,
     InspectionValidationReport,
@@ -142,3 +145,45 @@ def to_title(value):
     if not isinstance(value, str):
         return value
     return value.replace("_", " ").title()
+
+class UploadExcelView(LoginRequiredMixin, View):
+    """
+    Upload an Excel file and import rows into a model.
+    """
+    template_name = "documents/excel_templates/excel_upload.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
+    def post(self, request, *args, **kwargs):
+        excel_file = request.FILES.get("excel_file")
+        if not excel_file:
+            return render(request, self.template_name, {"error": "Please choose a file."})
+
+        try:
+            df = pd.read_excel(excel_file)  # or pd.read_csv for CSV
+        except Exception as e:
+            return render(request, self.template_name, {"error": f"Could not read file: {e}"})
+
+        # Example: import into ChecklistEvaluationSheet model
+        imported = 0
+        from ..models import ChecklistEvaluationSheet  # import your model here
+
+        # Wrap in transaction for speed and rollback safety
+        with transaction.atomic():
+            for _, row in df.iterrows():
+                # Map Excel columns to model fields. Example:
+                ChecklistEvaluationSheet.objects.create(
+                    # field_name_in_model = row['ColumnNameInExcel'],
+                    # fill out according to your sheet’s columns:
+                    name=row.get("Name", ""),
+                    description=row.get("Description", ""),
+                    # … other fields …
+                )
+                imported += 1
+
+        return render(
+            request,
+            self.template_name,
+            {"success": f"Successfully imported {imported} records."},
+        )

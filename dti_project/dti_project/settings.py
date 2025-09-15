@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'dashboard',
     'documents',
     'users',
+    'notifications',
+    'channels',
     'django_browser_reload',
     'crispy_forms',
     'crispy_bootstrap5',
@@ -53,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'dti_project.urls'
@@ -75,6 +79,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'dti_project.wsgi.application'
 
+# ASGI application (needed for Django Channels)
+ASGI_APPLICATION = "dti_project.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -147,3 +153,12 @@ AUTHENTICATION_BACKENDS = [
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
+TIME_ZONE = "Asia/Manila"
+USE_TZ = True

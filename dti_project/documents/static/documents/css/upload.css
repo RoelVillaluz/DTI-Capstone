@@ -1,0 +1,87 @@
+
+.excel-dropzone {
+  display: block;
+  background-color: #f4f8ff;          
+  border: 2px dashed #2684ff;         
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  max-width: 700px;
+  margin: 1rem auto;
+}
+
+.excel-dropzone.dragover {
+  background-color: #e6f0ff;
+  border-color: #0056b3;
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.upload-icon {
+  background-color: #1e1e72;          
+  color: #fff;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 1.25rem;
+}
+
+#drag-drop-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.highlighted-span {
+  color: #0056b3;                     
+  font-weight: 600;
+}
+
+#file-text {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.btn.btn-primary {
+  display: block;       /* full block element */
+  margin: 1rem auto;    /* centers horizontally */
+  background-color: #2684ff;
+  color: white;
+  padding: 0.6rem 1.25rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-align: center;
+}
+
+.btn.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.success-msg, .error-msg {
+  max-width: 700px;
+  margin: 0 auto 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+.success-msg {
+  background-color: #d4edda;
+  color: #155724;   
+}
+.error-msg {
+  background-color: #f8d7da;
+  color: #721c24;
+}

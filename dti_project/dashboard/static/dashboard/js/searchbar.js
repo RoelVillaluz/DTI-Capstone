@@ -7,48 +7,60 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const searchInput = document.querySelector('input[name="query"]');
     const suggestionsBox = document.getElementById('suggestions-box');
+    const notificationsList = document.querySelector('.notifications-container');
 
     if (searchInput && suggestionsBox) {
-        searchInput.addEventListener('input', function() {
-            const query = this.value;
-            if (query.length > 0) {
-                fetch(`/search-suggestions/?query=${query}`)
-                .then(response => response.json())
-                .then(data => {
-                    suggestionsBox.innerHTML = '';
-                    console.log('Response Data', data);
+        searchInput.addEventListener('input', function () {
+        const query = this.value.trim();
+        if (query.length > 0) {
+            // show suggestions immediately (so user sees loading state)
+            suggestionsBox.classList.add('visible');
+            // hide notifications if open
+            notificationsList?.classList.remove('visible');
 
-                    if (data.role === 'admin') {
-                        // Admin: show users
-                        if (data.user_count > 0) {
-                            createCategoryHeader("Users", data.user_count);
-                           const suggestionList = createSuggestionList()
-                            data.users.forEach(user => {
-                                const userSuggestion = createSuggestionItem("user", user);
-                                suggestionList.append(userSuggestion);
-                            });
-                            suggestionsBox.append(suggestionList); 
-                        }
-                    }
+            // then fetch and populate suggestions
+            fetch(`/search-suggestions/?query=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(data => {
+                suggestionsBox.innerHTML = '';
+                console.log('Response Data', data);
 
-                    // Both admin + business_owner: show documents
-                    if (data.documents.count > 0) {
-                        createCategoryHeader(data.role === 'admin' ? 'Documents' : 'My Documents', data.documents.count);
-                        const suggestionList = createSuggestionList()
-                        data.documents.results.forEach(result => {
-                            const documentSuggestion = createSuggestionItem("document", result);
-                            suggestionList.append(documentSuggestion);
-                        });
-                        suggestionsBox.append(suggestionList); 
-                    }
-                });
+                if (data.role === 'admin' && data.user_count > 0) {
+                createCategoryHeader('Users', data.user_count);
+                const suggestionList = createSuggestionList();
+                data.users.forEach(user => suggestionList.append(createSuggestionItem('user', user)));
+                suggestionsBox.append(suggestionList);
+                }
 
-                suggestionsBox.style.visibility = 'visible';
-            } else {
-                suggestionsBox.style.visibility = 'hidden';
-            }
+                if (data.documents?.count > 0) {
+                createCategoryHeader(data.role === 'admin' ? 'Documents' : 'My Documents', data.documents.count);
+                const suggestionList = createSuggestionList();
+                data.documents.results.forEach(result => suggestionList.append(createSuggestionItem('document', result)));
+                suggestionsBox.append(suggestionList);
+                }
+            })
+            .catch(err => {
+                console.error('Suggestions fetch failed', err);
+                // optionally show an error or empty state in suggestionsBox
+            });
+        } else {
+            suggestionsBox.classList.remove('visible');
+        }
         });
     }
+
+    // click outside -> remove 'active'
+    document.addEventListener('click', function(e) {
+        // check if the click target is NOT inside the searchBarContainer
+        if (!searchBarContainer.contains(e.target)) {
+            searchBarContainer.classList.remove('active');
+        }
+
+        if (suggestionsBox.classList.contains('visible')) {
+            suggestionsBox.classList.remove('visible')
+        }
+    });
+
 
     function createCategoryHeader(category, itemCount) {
         const header = document.createElement('div');

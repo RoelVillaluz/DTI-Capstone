@@ -580,7 +580,7 @@
     color: white;
 }
 
-#export-excel-btn {
+.documents-table-header .actions button:not(#upload-from-excel-btn) {
     display: flex;
     align-items: start;
     background-color: white;
@@ -595,17 +595,7 @@
     transition: 0.1s;
 }
 
-#export-excel-btn i {
-    color: var(--text-muted);
-    transition: 0.1s;
-}
-
-#export-excel-btn:hover {
+.documents-table-header .actions button:not(#upload-from-excel-btn):hover {
     border: solid 1px var(--accent);
     color: var(--accent);
 }
-
-#export-excel-btn:hover i {
-    color: var(--accent);  
-}
-

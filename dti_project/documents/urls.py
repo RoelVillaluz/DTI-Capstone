@@ -36,7 +36,8 @@ urlpatterns = [
     path("checklist-evaluation-sheets/", views.ChecklistEvaluationSheetListView.as_view(), name="checklist-list"),
 
     # EXCEL VIEWS
-    path("export-to-excel", views.ExportDocumentsExcelView.as_view(), name='export-to-excel'),
+    path("export-to-excel", views.ExportDocumentsExcelView.as_view(), name='export-to-excel'), 
+    path('upload-excel', views.UploadExcelView.as_view(), name='upload-excel'),
 
     # ACTION VIEWS
     path('approve-documents', views.ApproveDocumentsView.as_view(), name='approve-documents')
