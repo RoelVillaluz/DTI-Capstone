@@ -13,7 +13,7 @@
     width: 100%;
     max-width: 1200px;
     border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     animation: fadeIn 0.6s ease-in-out;
 }
@@ -32,11 +32,11 @@
 
 .profile-header-content {
     display: flex;
-    align-items: flex-end; 
+    align-items: flex-end;
     gap: 1.5rem;
     padding: 0 2rem;
     position: absolute;
-    bottom: -100px; /* bring content slightly below banner */
+    bottom: -100px;
     left: 0;
     right: 0;
 }
@@ -66,7 +66,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    color: #111827; /* dark text for visibility */
+    color: #111827;
 }
 
 .profile-name {
@@ -87,17 +87,17 @@
     border-radius: 999px;
     font-size: 0.8rem;
     font-weight: bold;
-    background: #3b82f6; /* darker badge for contrast */
+    background: #3b82f6;
     color: #fff;
 }
 
 /* Profile Body and Sections */
 .profile-card .profile-body,
 .profile-card .profile-section {
-    padding-top: 110px;     /* keep this as-is */
+    padding-top: 110px;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
-    padding-bottom: 0.5rem;  /* reduced bottom padding */
+    padding-bottom: 0.5rem;
 }
 
 .profile-body h2,
@@ -107,18 +107,16 @@
     color: var(--primary, #0f0853);
 }
 
-
 /* Stats Grid */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));    
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
     gap: 0.5rem;
     text-align: center;
-    margin-top: 0.25rem;     /* pull grid closer to body */
-    padding-top: 0;          /* remove extra space above */
-    padding-bottom: 0.25rem; /* keep it neat */
+    margin-top: 0.25rem;
+    padding-top: 0;
+    padding-bottom: 0.25rem;
     min-height: 40px;
-
 }
 
 /* Stat Card */
@@ -126,34 +124,31 @@
     background: #d4c8ff;
     border-radius: 0.5rem;
     padding: 0.5rem 0.75rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    height: 60px; /* fixed height */
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column; /* keeps h3 + p stacked */
+    flex-direction: column;
 }
 
 .stat-box:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .stat-box h3 {
-    font-size: 1.25rem;    /* smaller number text */
+    font-size: 1.25rem;
     margin: 0;
     color: var(--primary, #0f0853);
 }
 
 .stat-box p {
     margin: 0.15rem 0 0;
-    font-size: 1rem;   /* smaller label text */
+    font-size: 1rem;
     color: #6b7280;
 }
-
-
-
 
 /* Actions */
 .profile-actions {
@@ -196,6 +191,68 @@
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Transaction Section */
+.transaction-history-wrapper {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--background, #ffffff);
+}
+
+/* Transaction Card same style as profile-card */
+.transaction-card {
+    background: #fff;
+    width: 200%;
+    max-width: 2000px;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.6s ease-in-out;
+    padding:2rem;
+}
+
+.transaction-card h2 {
+    font-size: 1.2rem;
+    color: var(--primary, #0f0853);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+
+}
+
+.transaction-card p {
+    font-size: 0.95rem;
+    color: #374151;
+    margin: 0.5rem 0;
+}
+
+/* Transaction Table */
+.transaction-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.transaction-table th,
+.transaction-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: left;
+    font-size: 0.95rem;
+    color: #111827;
+}
+
+.transaction-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: var(--primary, #0f0853);
 }

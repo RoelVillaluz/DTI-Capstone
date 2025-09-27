@@ -8,6 +8,8 @@
 {% endblock %}
 
 {% block body %}
+
+<!-- Profile section -->
 <div class="profile-wrapper">
     <div class="profile-card">
 
@@ -48,17 +50,6 @@
             <p><strong>Address:</strong> {{ profile.default_address|default:"Not provided" }}</p>
         </div>
 
-
-        <!-- Activity Section, removed for now-->
-        <!-- <div class="profile-section">
-            <h2>Recent Activity</h2>
-            <ul class="activity-list">
-                <li><i class="fas fa-check-circle"></i> Submitted a new document</li>
-                <li><i class="fas fa-user-edit"></i> Updated profile information</li>
-                <li><i class="fas fa-clock"></i> Last login: {{ profile.last_login|date:"M d, Y H:i" }}</li>
-            </ul>
-        </div> -->
-
         <!-- Stats Section -->
         <div class="profile-section stats-grid">
             <div class="stat-box">
@@ -68,6 +59,37 @@
             <div class="stat-box">
                 <h3>{{ profile.date_joined|date:"M Y" }}</h3>
                 <p>Joined</p>
+            </div>
+        </div>
+        <!-- Transaction History section -->
+        <div class="transaction-history-wrapper">
+            <div class="transaction-card"> {# same style as profile-card but isolated #}
+                <h2>Transaction History</h2>
+
+                {% if transactions %}
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Reference</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for txn in transactions %}
+                        <tr>
+                            <td>{{ txn.date|date:"M d, Y" }}</td>
+                            <td>{{ txn.reference }}</td>
+                            <td>{{ txn.amount }}</td>
+                            <td>{{ txn.status }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No transactions found.</p>
+                {% endif %}
             </div>
         </div>
     </div>
