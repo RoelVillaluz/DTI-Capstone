@@ -3,34 +3,47 @@
 {% block title %} Sign In {% endblock %}
 
 {% block body %}
-    <div class="glass-layer">
-        <div class="authentication-form-container">
-            <div class="graphics-panel">
-                
-            </div>
-            <form action="{% url 'sign-in' %}" class="authentication-form" method="post">
-                {% csrf_token %}
-                <header>
-                    <h1>Welcome Back</h1>
-                    <h3>Sign in to your account to continue.</h3>
-                </header>
-
-                <div class="form-scroll">
-                    <div class="form-group">
-                        {{ form.username.label_tag }}
-                        {{ form.username }}
-                    </div>
-
-                    <div class="form-group">
-                        {{ form.password.label_tag }}
-                        {{ form.password }}
-                        {{ form.password.errors }}
-                    </div>
-                </div>
-                
-                <button type="submit">Sign In</button>
-                <p>Don't have an account yet? <a href="{% url 'register' %}">Create account instead</a></p>
-            </form>
+<div class="glass-layer">
+    <div class="authentication-form-container">
+        <div class="graphics-panel">
+            <!-- You can put your logo or illustration here -->
         </div>
+
+        <form action="{% url 'sign-in' %}" class="authentication-form" method="post">
+            {% csrf_token %}
+            <header>
+                <h1>Welcome Back</h1>
+                <h3>Sign in to your account to continue.</h3>
+            </header>
+
+            <div class="form-scroll">
+                <div class="form-scroll">
+                <div class="form-group">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.password.label_tag }}
+                    {{ form.password }}
+                    {{ form.password.errors }}
+                </div>
+            </div>
+            
+            <button type="submit">Sign In</button>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <!-- Google OAuth Login -->
+            <a href="{% url 'social:begin' 'google-oauth2' %}" class="google-login-btn">
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo">
+                Sign in with Google
+            </a>
+
+            <p>Don't have an account yet? <a href="{% url 'register' %}">Create account instead</a></p>
+        </form>
     </div>
+</div>
 {% endblock %}

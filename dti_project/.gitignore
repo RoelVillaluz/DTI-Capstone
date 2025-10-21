@@ -1,1 +1,30 @@
-# Django
+[# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.swp
+*.egg-info/
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Keep your local SQLite DB
+db.sqlite3
+
+# Django stuff
+*.sqlite3
+*.log
+media/
+staticfiles/
+migrations/__pycache__/
+migrations/*.pyc
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+]

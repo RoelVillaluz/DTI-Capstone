@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-td$o4dni7vqty0^p(!*ub*j_#o#c@ux3ox=6zli)2(4v(3yrd-'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-PAYMONGO_SECRET_KEY = "sk_test_nyLZiyRtD6gQJxzNJRfVkb7P"
+PAYMONGO_SECRET_KEY = os.getenv('PAYMONGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -50,6 +53,7 @@ INSTALLED_APPS = [
     'payments',
     'locations',
     'rest_framework',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +66,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 CACHES = {
@@ -160,11 +165,38 @@ LOGIN_URL = 'users/sign-in'
 AUTH_USER_MODEL = 'users.User'
 
 AUTHENTICATION_BACKENDS = [
+    'social_core.backends.google.GoogleOAuth2',
     'users.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend', # Default login
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
+TIME_ZONE = "Asia/Manila"
+USE_TZ = True
+
+# Make sure social_django works with templates
+TEMPLATES[0]['OPTIONS']['context_processors'] += [
+    'social_django.context_processors.backends',
+    'social_django.context_processors.login_redirect',
+]
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
+
+LOGIN_URL = 'sign-in'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = '/'  # or your home/dashboard page
+LOGOUT_REDIRECT_URL = 'sign-in'
+
 
 CHANNEL_LAYERS = {
     "default": {
