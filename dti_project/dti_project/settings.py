@@ -194,7 +194,7 @@ DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 LOGIN_URL = 'sign-in'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = '/'  # or your home/dashboard page
+LOGIN_REDIRECT_URL = '/'  
 LOGOUT_REDIRECT_URL = 'sign-in'
 
 

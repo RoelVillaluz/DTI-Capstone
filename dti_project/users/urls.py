@@ -38,6 +38,7 @@ urlpatterns = [
 
 htmxpatterns = [
     path('check_email_exists', views.check_email_exists, name="check-email-exists"),
+    path('check-password-strength/', views.check_password_strength, name='check-password-strength'),
 ]
 
 urlpatterns += htmxpatterns

@@ -230,7 +230,7 @@ class VerifyUserView(View):
             user.verification_code_expiration_date = None
             user.save()
 
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             del request.session['pending_verification_user']
 
             return JsonResponse({
