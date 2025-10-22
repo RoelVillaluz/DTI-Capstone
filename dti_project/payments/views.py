@@ -1,14 +1,18 @@
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from notifications.utils import send_user_notification
 import requests
 import base64
+import datetime
+from io import BytesIO
+from users.models import User
+from django.conf import settings
+from django.contrib import messages
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
-from io import BytesIO
-import datetime
-from django.conf import settings
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
+from notifications.models import Notification
+from django.contrib.contenttypes.models import ContentType
 from documents.models import SalesPromotionPermitApplication, OrderOfPayment
 
 def payment_page(request, oop_id):
@@ -31,7 +35,7 @@ def payment_page(request, oop_id):
         "total_amount": total_amount,
     }
 
-    # ✅ When user proceeds to pay via GCash
+    # When user proceeds to pay via GCash
     if request.method == "POST" and "proceed" in request.POST:
         payment_method = request.POST.get("payment_method")
 
@@ -77,12 +81,37 @@ def payment_success(request, oop_id):
     if oop.payment_status != OrderOfPayment.PaymentStatus.VERIFIED:
         oop.payment_status = OrderOfPayment.PaymentStatus.PAID
         oop.save()
-    messages.success(request, f"✅ Payment for {oop.sales_promotion_permit_application} successful! Awaiting verification.")
+    # Notify admin/collection agent
+    from users.models import User
+    admins = User.objects.filter(role__in=["admin", "collection_agent"])
+
+    for admin in admins:
+        notification = Notification.objects.create(
+            user=admin,
+            sender=request.user,
+            message=f"{request.user.get_full_name()} has successfully paid for OOP #{oop.pk}.",
+            type="info",
+            content_type=ContentType.objects.get_for_model(oop),
+            object_id=oop.pk,
+        )
+        send_user_notification(admin.id, notification)
+
+    # Notify business owner
+        notification = Notification.objects.create(
+            user=oop.sales_promotion_permit_application.user,
+            sender=request.user,
+            message=f"Your payment for OOP #{oop.pk} was successful and is now pending verification.",
+            type="info",
+            content_type=ContentType.objects.get_for_model(oop),
+            object_id=oop.pk,
+        )
+        send_user_notification(oop.sales_promotion_permit_application.user.id, notification)
+
     return render(request, "payments/payment_success.html", {"oop": oop})
 
 
 def payment_failed(request):
-    messages.error(request, "❌ Payment failed or was canceled. Please try again.")
+    messages.error(request, "Payment failed or was canceled. Please try again.")
     return render(request, "payments/payment_failed.html")
 
 @login_required
@@ -94,12 +123,20 @@ def verify_payment(request, oop_id):
         return redirect('documents-list')
 
     if oop.payment_status == OrderOfPayment.PaymentStatus.PAID:
-        # ✅ Just update status — no PDF generation here
+        # Just update status
         oop.payment_status = OrderOfPayment.PaymentStatus.VERIFIED
         oop.save()
 
-        messages.success(request, "✅ Payment verified successfully! You can now download the receipt.")
-        return redirect('documents-list')
+        # Notify business owner
+        notification = Notification.objects.create(
+            user=oop.sales_promotion_permit_application.user,
+            sender=request.user,
+            message=f"Your payment for OOP #{oop.pk} has been verified! You can now download your official receipt.",
+            type="approved",
+            content_type=ContentType.objects.get_for_model(oop),
+            object_id=oop.pk,
+        )
+        send_user_notification(oop.sales_promotion_permit_application.user.id, notification)
 
     else:
         messages.warning(request, "Payment must be marked as 'Paid' before verifying.")
@@ -109,12 +146,12 @@ def verify_payment(request, oop_id):
 def download_receipt(request, oop_id):
     oop = get_object_or_404(OrderOfPayment, pk=oop_id)
 
-    # ✅ Only allow download if already verified
+    # Only allow download if already verified
     if oop.payment_status != OrderOfPayment.PaymentStatus.VERIFIED:
         messages.warning(request, "Receipt is only available after verification.")
         return redirect('documents-list')
 
-    # ✅ Generate PDF in memory
+    # Generate PDF in memory
     buffer = BytesIO()
     p = canvas.Canvas(buffer, pagesize=A4)
 
@@ -138,6 +175,19 @@ def download_receipt(request, oop_id):
     p.showPage()
     p.save()
     buffer.seek(0)
+    
+    admins = User.objects.filter(role__in=["admin", "collection_agent"])
+    for admin in admins:
+        notification = Notification.objects.create(
+            user=admin,
+            sender=request.user,
+            message=f"{request.user.get_full_name()} downloaded the receipt for OOP #{oop.pk}.",
+            type="info",
+            content_type=ContentType.objects.get_for_model(oop),
+            object_id=oop.pk,
+        )
+        send_user_notification(admin.id, notification)
+
 
     return FileResponse(buffer, as_attachment=True, filename=f"DTI_Receipt_{oop.pk}.pdf")
 

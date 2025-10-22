@@ -1,23 +1,32 @@
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, View
-from django.contrib.auth.views import LoginView, LogoutView
-from users.mixins import FormSubmissionMixin
-from .models import User
-from .forms import CustomLoginForm, CustomUserCreationForm
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, TemplateView, View
+from django.contrib.auth.views import LoginView
 from django.contrib.auth import login, logout as auth_logout, get_user_model
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 import logging
-from django.views.generic import TemplateView, View, DetailView, UpdateView
+
+from users.mixins import FormSubmissionMixin
 from users.models import User
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
-from django.shortcuts import render, get_object_or_404
-from users.models import User
-from django.views.generic import ListView
+from .forms import CustomLoginForm, CustomUserCreationForm
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from .forms import AddStaffForm
+from django.http import JsonResponse
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.contrib.auth import get_user_model
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.db import IntegrityError
+import random, string
+from .forms import AddStaffForm
 
 from documents.models import (
     # Base models
@@ -55,6 +64,105 @@ from documents.models import (
 logger = logging.getLogger(__name__)
 
 # Create your views here.
+
+
+#add staff view
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from .forms import AddStaffForm
+
+User = get_user_model()
+
+def add_staff(request):
+    if request.method == 'POST':
+        form = AddStaffForm(request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            address = form.cleaned_data.get('default_address', '')
+            phone = form.cleaned_data.get('default_phone', '')
+
+            # ✅ Generate unique email
+            base_email = f"{last_name.lower()}.dti.agent@gmail.com"
+            email = base_email
+            counter = 1
+            while User.objects.filter(email=email).exists():
+                email = f"{last_name.lower()}{counter}.dti.agent@gmail.com"
+                counter += 1
+
+            username = email.split('@')[0]
+            password = f"{last_name.capitalize()}123"
+
+            # Create staff user
+            user = User.objects.create_user(
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                password=password,
+                role='collection_agent',
+                is_staff=True,
+            )
+
+            user.default_address = address
+            user.default_phone = phone
+            user.save()
+
+            print("DEBUG: Popup data passed to template!")
+
+            # ✅ Return same page with popup
+            return render(request, 'users/add_staff.html', {
+                'form': AddStaffForm(),
+                'show_popup': True,
+                'popup_email': email,
+                'popup_password': password,
+                'user_id': user.id,
+            })
+    else:
+        form = AddStaffForm()
+
+    return render(request, 'users/add_staff.html', {'form': form})
+
+
+def delete_new_staff(request, user_id):
+    User.objects.filter(id=user_id).delete()
+    messages.success(request, "Newly created account deleted.")
+    return redirect('staff_accounts')
+
+
+
+# Staff Created Popup View
+from django.shortcuts import render
+
+def staff_created_popup(request):
+    email = request.session.get('new_staff_email')
+    password = request.session.get('new_staff_password')
+
+    context = {
+        'email': email,
+        'password': password,
+    }
+
+    return render(request, 'users/staff_created_popup.html', context)
+
+# Delete New Staff View
+
+User = get_user_model()
+
+def delete_new_staff(request, user_id):
+    """Delete the newly created staff account."""
+    try:
+        User.objects.filter(id=user_id).delete()
+        messages.success(request, "Newly created account deleted.")
+    except Exception as e:
+        messages.error(request, f"Error deleting account: {e}")
+    return redirect('staff_accounts')
+
+
+
+
+
 
 #Settings View
 class SettingsView(LoginRequiredMixin, TemplateView):

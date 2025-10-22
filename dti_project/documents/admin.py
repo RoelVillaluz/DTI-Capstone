@@ -75,9 +75,17 @@ class CollectionReportItemAdmin(admin.ModelAdmin):
 
 @admin.register(SalesPromotionPermitApplication)
 class SalesPromotionAdmin(StatusModelAdmin):
-    list_display = ("promo_title",)
+    list_display = ("promo_title", "payment_status_for_owner")
     search_fields = ("promo_title", "sponsor_name", "advertising_agency_name")
-
+    
+    def payment_status_for_owner(self, obj):
+        oop = getattr(obj, 'order_of_payment', None)
+        if oop and oop.payment_status in ["paid", "verified"]:
+            # Show "Paid" to business owner, even if verified
+            return "Paid"
+        return ""  # Or "Not Paid" if you prefer
+    
+    payment_status_for_owner.short_description = "Payment Status"
 
 @admin.register(ProductCovered)
 class ProductCoveredAdmin(admin.ModelAdmin):  # Not DraftModel
@@ -153,8 +161,20 @@ class ServiceRepairAccreditationApplicationAdmin(StatusModelAdmin):
 
 @admin.register(OrderOfPayment)
 class OrderOfPaymentAdmin(StatusModelAdmin):
-    list_display = ("name", "date")
-    search_fields = ("name",)
+    list_display = (
+        "id",
+        "sales_promotion_permit_application",
+        "total_amount",
+        "payment_status",
+        "status",
+        "date",
+    )
+    list_filter = ("payment_status", "status", "date")
+    search_fields = ("sales_promotion_permit_application__sponsor_name",)
+    ordering = ("-date",)
+
+    # Makes Save buttons appear both at top and bottom
+    save_on_top = True
 
 
 @admin.register(InspectionValidationReport)

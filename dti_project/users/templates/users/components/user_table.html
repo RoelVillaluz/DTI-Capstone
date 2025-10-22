@@ -8,7 +8,9 @@
         <h3>{{ user_type|titlecase }} Accounts</h3>
         <div class="actions">
             {% if user_type == 'staff' %}
-                <button id="add-user-btn">Add {{ user_type|titlecase}}</button>
+            <a href="{% url 'add_staff' %}">
+                <button id="add-user-btn">Add {{ user_type|titlecase }}</button>
+            </a>
             {% endif %}
             <button id="filter-btn">
                 <i class="fas fa-sliders-h"></i>

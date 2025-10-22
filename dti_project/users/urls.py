@@ -34,6 +34,12 @@ urlpatterns = [
     path('staff-accounts/', views.StaffListView.as_view(), name="staff_accounts"),
     path('business-owner-accounts/', views.BusinessOwnerListView.as_view(), name="bo_accounts"),
 
+    # Add Staff Account
+    path('staff-accounts/add/', views.add_staff, name="add_staff"),
+    path('staff-accounts/delete/<int:user_id>/', views.delete_new_staff, name='delete_new_staff'),
+
+
+
 ]
 
 htmxpatterns = [

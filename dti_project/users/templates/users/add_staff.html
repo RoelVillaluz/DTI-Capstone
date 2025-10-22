@@ -1,0 +1,61 @@
+{% extends "dashboard/layout.html" %}
+{% load static %}
+
+{% block title %}Add Staff{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users/css/add_staff.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="add-staff-wrapper">
+    <div class="add-staff-card">
+        <h2>Add New Staff / Collection Agent</h2>
+
+        <form id="add-staff-form" method="post" novalidate>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_first_name">First Name</label>
+                {{ form.first_name }}
+            </div>
+            <div class="form-group">
+                <label for="id_last_name">Last Name</label>
+                {{ form.last_name }}
+            </div>
+            <div class="form-group">
+                <label for="id_default_address">Address</label>
+                {{ form.default_address }}
+            </div>
+            <div class="form-group">
+                <label for="id_default_phone">Contact Number</label>
+                {{ form.default_phone }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Staff Account</button>
+        </form>
+
+        <a href="{% url 'staff_accounts' %}" class="cancel-btn">Cancel</a>
+    </div>
+</div>
+
+<!-- Container for JS injected popup -->
+<div id="popup-container" style="display:none;"></div>
+
+{% if show_popup %}
+<div id="successPopup" class="popup-overlay">
+    <div class="popup-box">
+        <h2>Account Created Successfully</h2>
+        <p><strong>Email:</strong> {{ popup_email }}</p>
+        <p><strong>Password:</strong> {{ popup_password }}</p>
+        <div class="popup-buttons">
+            <form action="{% url 'delete_new_staff' user_id=user_id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete Account</button>
+            </form>
+            <a href="{% url 'staff_accounts' %}" class="btn btn-success">Confirm</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -5,6 +5,21 @@ from .models import User
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
+from django import forms
+from .models import User
+
+
+class AddStaffForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'default_address', 'default_phone']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'placeholder': 'First Name', 'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'placeholder': 'Last Name', 'class': 'form-control'}),
+            'default_address': forms.TextInput(attrs={'placeholder': 'Address', 'class': 'form-control'}),
+            'default_phone': forms.TextInput(attrs={'placeholder': 'Contact Number', 'class': 'form-control'}),
+        }
+
 
 class CustomLoginForm(AuthenticationForm):
     username = forms.EmailField(label="Email")  # override 'username' field to be an EmailField

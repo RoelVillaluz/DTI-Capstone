@@ -71,7 +71,7 @@
 
 
 .payment-btn {
-    display: flex;
+    display: inline-block;
     justify-content: center;
     align-items: center;
     text-decoration: none;
@@ -82,6 +82,7 @@
     border-radius: var(--radius-sm);
     background-color: var(--primary);
     transition: background var(--transition-fast), transform var(--transition-fast);
+    min-width: 100px;
     text-align: center;
     cursor: pointer;
     border: none;
@@ -116,7 +117,7 @@
 }
 
 .payment-badge {
-    display: flex;
+    display: inline-block;
     justify-content: center;
     align-items: center;
     padding: 0.35rem 0.75rem;
@@ -125,6 +126,7 @@
     font-weight: 600;
     text-align: center;
     white-space: nowrap;
+    min-width: 80px;
 }
 
 .payment-badge-warning {
@@ -191,14 +193,18 @@
     }
 }
 
+.payment-status-vertical,
 .payment-status-horizontal {
     display: flex;
-    flex-direction: row;
-    gap: 8px; 
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: center; 
 }
 
 .payment-status-vertical {
-    display: flex;
     flex-direction: column;
-    gap: 6px;
+}
+
+.payment-status-horizontal {
+    flex-direction: row;
 }
