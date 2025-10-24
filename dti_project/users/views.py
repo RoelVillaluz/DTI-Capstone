@@ -108,6 +108,8 @@ def add_staff(request):
             user.default_address = address
             user.default_phone = phone
             user.save()
+            
+            messages.success(request, f"Staff '{first_name} {last_name}' added successfully!")
 
             print("DEBUG: Popup data passed to template!")
 
