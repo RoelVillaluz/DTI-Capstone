@@ -149,7 +149,7 @@ def download_receipt(request, oop_id):
     # Only allow download if already verified
     if oop.payment_status != OrderOfPayment.PaymentStatus.VERIFIED:
         messages.warning(request, "Receipt is only available after verification.")
-        return redirect('documents-list')
+        return redirect('all-documents')
 
     # Generate PDF in memory
     buffer = BytesIO()
