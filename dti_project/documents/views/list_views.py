@@ -138,7 +138,7 @@ class CollectionReportListView(
     template_name = "documents/collection_reports/collection_report_list.html"
     context_object_name = "collection_reports"
     active_doc_type = "collection_reports"
-    allowed_roles = ["collection_agent", "admin"]
+    allowed_roles = ["collection_agent", "alt_collection_agent", "admin"]
 
     def get_queryset(self):
         # Start with base queryset (possibly restricted by RoleFormPageRestrictionMixin)

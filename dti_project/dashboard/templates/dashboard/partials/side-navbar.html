@@ -86,6 +86,14 @@
                         </a>
                     </li>
                 {% endif %}
+                {% if user.role == 'alt_collection_agent' %}
+                    <li class="nav-item">
+                        <a href="{% url 'collection-report-list' %}" class="nav-link">
+                            <i class="fa-solid fa-file-invoice"></i>
+                            <span>Collection Reports</span>
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </section>
 

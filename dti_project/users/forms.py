@@ -218,7 +218,7 @@ class CustomUserCreationForm(UserCreationForm, BaseUserForm):
         user.email = self.cleaned_data['email']
         user.default_phone = self.cleaned_data['default_phone']
         user.default_address = self.cleaned_data['default_address']
-        user.role = 'business_owner'
+        user.role = 'unverified_owner'
 
         base_username = slugify(f"{user.first_name}.{user.last_name}")
         username = base_username
